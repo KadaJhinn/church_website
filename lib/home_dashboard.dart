@@ -13,7 +13,7 @@ class HomeDashboard extends StatefulWidget {
 }
 
 class _HomeDashboardState extends State<HomeDashboard> {
-  // Generate analytics counts
+
   Map<String, int> getAnalytics() {
     Map<String, int> data = {
       "Rooftop": 0,
@@ -28,14 +28,12 @@ class _HomeDashboardState extends State<HomeDashboard> {
     return data;
   }
 
-  // Delete an event
   void deleteEvent(EventModel event) {
     setState(() {
       EventManager.deleteEvent(event);
     });
   }
 
-  // Edit an event
   void editEvent(EventModel event) async {
     try {
       final updatedEvent = await Navigator.push<EventModel>(
@@ -46,25 +44,30 @@ class _HomeDashboardState extends State<HomeDashboard> {
       );
 
       if (updatedEvent != null && mounted) {
-        EventManager.updateEvent(event, updatedEvent); // update explicitly
-        setState(() {}); // refresh dashboard
+        EventManager.updateEvent(event, updatedEvent);
+        setState(() {});
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             duration: const Duration(seconds: 4),
             backgroundColor: Colors.teal,
-            content: Text("Event Updated: ${updatedEvent.title}", style: const TextStyle(fontSize: 16)),
+            content: Text(
+              "Event Updated: ${updatedEvent.title}",
+              style: const TextStyle(fontSize: 16),
+            ),
           ),
         );
       }
     } catch (e, stack) {
       print("Error editing event: $e\n$stack");
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Failed to edit event"), backgroundColor: Colors.red),
+        const SnackBar(
+          content: Text("Failed to edit event"),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }
 
-  // Show latest announcement as SnackBar
   void showAnnouncementSnackBar() {
     if (EventManager.events.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -98,10 +101,10 @@ class _HomeDashboardState extends State<HomeDashboard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Home", style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+            const Text("Home",
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
             const SizedBox(height: 25),
 
-            // Event Announcement
             GestureDetector(
               onTap: showAnnouncementSnackBar,
               child: Container(
@@ -114,7 +117,9 @@ class _HomeDashboardState extends State<HomeDashboard> {
                   children: [
                     Icon(Icons.campaign, color: Colors.teal),
                     SizedBox(width: 10),
-                    Text("Event Announcement", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    Text("Event Announcement",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold)),
                   ],
                 ),
               ),
@@ -122,7 +127,6 @@ class _HomeDashboardState extends State<HomeDashboard> {
 
             const SizedBox(height: 25),
 
-            // Analytics bars
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: analytics.entries.map((entry) {
@@ -133,8 +137,12 @@ class _HomeDashboardState extends State<HomeDashboard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("${entry.key} • Total Events: ${entry.value}",
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: color),
+                      Text(
+                        "${entry.key} • Total Events: ${entry.value}",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: color),
                       ),
                       const SizedBox(height: 4),
                       LinearProgressIndicator(
@@ -150,10 +158,10 @@ class _HomeDashboardState extends State<HomeDashboard> {
             ),
 
             const SizedBox(height: 30),
-            const Text("Events", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            const Text("Events",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             const SizedBox(height: 15),
 
-            // Event lists by network
             _buildNetworkEvents("Rooftop"),
             _buildNetworkEvents("Men"),
             _buildNetworkEvents("Women"),
@@ -163,7 +171,8 @@ class _HomeDashboardState extends State<HomeDashboard> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const MonthlyLineupCalendar()),
+                  MaterialPageRoute(
+                      builder: (_) => const MonthlyLineupCalendar()),
                 );
               },
               child: const Text("View Monthly Lineup"),
@@ -171,52 +180,25 @@ class _HomeDashboardState extends State<HomeDashboard> {
           ],
         ),
       ),
-
-      // Floating button to add a new event
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () async {
-          try {
-            final newEvent = await Navigator.push<EventModel>(
-              context,
-              MaterialPageRoute(builder: (_) => const EventPlanner()),
-            );
-
-            if (newEvent != null && mounted) {
-              EventManager.addEvent(newEvent); // explicitly add
-              setState(() {}); // refresh dashboard
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  duration: const Duration(seconds: 4),
-                  backgroundColor: const Color.fromARGB(255, 53, 117, 110),
-                  content: Text("Event Saved: ${newEvent.title}", style: const TextStyle(fontSize: 16)),
-                ),
-              );
-            }
-          } catch (e, stack) {
-            print("Error opening EventPlanner: $e\n$stack");
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Failed to open event planner"), backgroundColor: Colors.red),
-            );
-          }
-        },
-      ),
     );
   }
 
-  // Build horizontal list of events per network
   Widget _buildNetworkEvents(String network) {
-    final events = EventManager.events.where((e) => e.network == network).toList();
+    final events =
+        EventManager.events.where((e) => e.network == network).toList();
     final color = _getNetworkColor(network);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(network, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: color)),
+        Text(network,
+            style: TextStyle(
+                fontSize: 18, fontWeight: FontWeight.bold, color: color)),
         const SizedBox(height: 8),
 
         if (events.isEmpty)
-          Text("No events for $network", style: const TextStyle(color: Colors.grey)),
+          Text("No events for $network",
+              style: const TextStyle(color: Colors.grey)),
 
         if (events.isNotEmpty)
           SizedBox(
@@ -238,9 +220,14 @@ class _HomeDashboardState extends State<HomeDashboard> {
                       right: 12,
                       child: Row(
                         children: [
-                          IconButton(icon: const Icon(Icons.edit, color: Colors.blueGrey, size: 20),
+                          IconButton(
+                              icon: const Icon(Icons.edit,
+                                  color: Colors.blueGrey, size: 20),
                               onPressed: () => editEvent(event)),
-                          IconButton(icon: const Icon(Icons.delete, color: Color.fromARGB(255, 146, 42, 77), size: 20),
+                          IconButton(
+                              icon: const Icon(Icons.delete,
+                                  color: Color.fromARGB(255, 146, 42, 77),
+                                  size: 20),
                               onPressed: () => deleteEvent(event)),
                         ],
                       ),
@@ -255,7 +242,6 @@ class _HomeDashboardState extends State<HomeDashboard> {
     );
   }
 
-  // Helper for network colors
   Color _getNetworkColor(String network) {
     switch (network.toLowerCase()) {
       case "men":
@@ -267,15 +253,3 @@ class _HomeDashboardState extends State<HomeDashboard> {
     }
   }
 }
-  // Helper for network colors
-  Color _getNetworkColor(String network) {
-    switch (network.toLowerCase()) {
-      case "men":
-        return Colors.blueGrey;
-      case "women":
-        return const Color.fromARGB(255, 146, 42, 77);
-      default:
-        return const Color.fromARGB(255, 53, 117, 110);
-    }
-  }
-

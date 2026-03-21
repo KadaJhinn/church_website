@@ -10,7 +10,7 @@ class EventModel {
   final Uint8List? imageBytes;
   final String? memberChoice;
 
-  // ✅ NEW FIELD
+  //  NEW FIELD
   final String service; // "1st Service" or "2nd Service"
 
   int attendance;
@@ -24,7 +24,7 @@ class EventModel {
     this.imageBytes,
     this.memberChoice,
 
-    // ✅ DEFAULT so old data still works
+    //  DEFAULT so old data still works
     this.service = "1st Service",
 
     this.attendance = 0,
@@ -41,7 +41,7 @@ class EventModel {
         'imageBytes': imageBytes != null ? base64Encode(imageBytes!) : null,
         'attendance': attendance,
 
-        // ✅ SAVE SERVICE
+        //  SAVE SERVICE
         'service': service,
       };
 
@@ -59,7 +59,7 @@ class EventModel {
           : null,
       attendance: json['attendance'] ?? 0,
 
-      // ✅ LOAD SERVICE (fallback if missing)
+      //  LOAD SERVICE (fallback if missing)
       service: json['service'] ?? "1st Service",
     );
   }

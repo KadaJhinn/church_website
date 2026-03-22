@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'event_manager.dart';
-import 'event_model.dart'; 
+import 'event_model.dart';
+import 'web_scan_page.dart';
 
 class AttendanceScanner extends StatefulWidget {
   const AttendanceScanner({super.key});
@@ -11,7 +12,6 @@ class AttendanceScanner extends StatefulWidget {
 
 class _AttendanceScannerState extends State<AttendanceScanner> {
   int attendees = 0;
-
   String? selectedService;
   String? selectedEvent;
 
@@ -26,7 +26,6 @@ class _AttendanceScannerState extends State<AttendanceScanner> {
             Text("Total Attendees: $attendees",
                 style: const TextStyle(fontSize: 24)),
             const SizedBox(height: 30),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -46,7 +45,6 @@ class _AttendanceScannerState extends State<AttendanceScanner> {
     );
   }
 
-  // Sunday Service options
   void _showSundayServiceDialog() {
     showDialog(
       context: context,
@@ -81,7 +79,6 @@ class _AttendanceScannerState extends State<AttendanceScanner> {
     );
   }
 
-  // Event location options
   void _showEventsDialog() {
     showDialog(
       context: context,
@@ -126,62 +123,30 @@ class _AttendanceScannerState extends State<AttendanceScanner> {
   }
 
   void _openScanPage(String title, String network) {
-    // Actually reference EventModel
-    EventModel? event = EventManager.events
-        .firstWhere((e) => e.network == network && e.title == title, orElse: () => EventModel(
-          title: title,
-          date: DateTime.now(),
-          time: "00:00",
-          network: network,
-          suggestions: [],
-          attendance: 0,
-        ));
+    EventModel event = EventManager.events.firstWhere(
+      (e) => e.network == network && e.title == title,
+      orElse: () => EventModel(
+        title: title,
+        date: DateTime.now(),
+        time: "00:00",
+        network: network,
+        suggestions: [],
+        attendance: 0,
+      ),
+    );
 
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => ScanPlaceholderPage(
+        builder: (_) => WebScanPage(
           event: event,
-          onScan: () {
+          onAttendanceCounted: () {
             setState(() => attendees += 1);
-
-            // Increment attendance
             event.attendance++;
           },
         ),
       ),
     );
   }
-}
 
-// Scan placeholder page
-class ScanPlaceholderPage extends StatelessWidget {
-  final EventModel event;
-  final VoidCallback onScan;
-
-  const ScanPlaceholderPage({
-    super.key,
-    required this.event,
-    required this.onScan,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Start: ${event.title}")),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.camera_alt, size: 80, color: Colors.grey),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: onScan,
-              child: const Text("Start"),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }

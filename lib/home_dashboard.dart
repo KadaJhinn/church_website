@@ -4,6 +4,7 @@ import 'event_manager.dart';
 import 'event_panel_card.dart';
 import 'event_planner.dart';
 import 'monthly_lineup_calendar.dart';
+import 'live_analytics_dashboard.dart';
 
 class HomeDashboard extends StatefulWidget {
   const HomeDashboard({super.key});
@@ -13,7 +14,6 @@ class HomeDashboard extends StatefulWidget {
 }
 
 class _HomeDashboardState extends State<HomeDashboard> {
-
   Map<String, int> getAnalytics() {
     Map<String, int> data = {
       "Rooftop": 0,
@@ -104,7 +104,29 @@ class _HomeDashboardState extends State<HomeDashboard> {
             const Text("Home",
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
             const SizedBox(height: 25),
-
+            const Text(
+              "Live Attendance",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            const LiveAnalyticsPanel(compact: true),
+            const SizedBox(height: 12),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const LiveAnalyticsDashboardPage(),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.insights),
+                label: const Text("Open Full Analytics Dashboard"),
+              ),
+            ),
+            const SizedBox(height: 18),
             GestureDetector(
               onTap: showAnnouncementSnackBar,
               child: Container(
@@ -124,9 +146,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
                 ),
               ),
             ),
-
             const SizedBox(height: 25),
-
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: analytics.entries.map((entry) {
@@ -156,16 +176,13 @@ class _HomeDashboardState extends State<HomeDashboard> {
                 );
               }).toList(),
             ),
-
             const SizedBox(height: 30),
             const Text("Events",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             const SizedBox(height: 15),
-
             _buildNetworkEvents("Rooftop"),
             _buildNetworkEvents("Men"),
             _buildNetworkEvents("Women"),
-
             const SizedBox(height: 25),
             ElevatedButton(
               onPressed: () {
@@ -195,11 +212,9 @@ class _HomeDashboardState extends State<HomeDashboard> {
             style: TextStyle(
                 fontSize: 18, fontWeight: FontWeight.bold, color: color)),
         const SizedBox(height: 8),
-
         if (events.isEmpty)
           Text("No events for $network",
               style: const TextStyle(color: Colors.grey)),
-
         if (events.isNotEmpty)
           SizedBox(
             height: 170,

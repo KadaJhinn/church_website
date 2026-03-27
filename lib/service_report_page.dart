@@ -15,15 +15,34 @@ class ServiceReportPage extends StatelessWidget {
         child: ValueListenableBuilder(
           valueListenable: AttendanceManager.attendees,
           builder: (context, attendees, _) {
-            final counts =
-                AttendanceManager.getCounts(serviceName);
+            final counts = AttendanceManager.getCounts(serviceName);
 
             final data = [
-              {"label": "Men", "value": counts["Men"] ?? 0, "color": Colors.blueGrey},
-              {"label": "Women", "value": counts["Women"] ?? 0, "color": Colors.pink},
-              {"label": "Youth", "value": counts["Youth"] ?? 0, "color": Colors.blue},
-              {"label": "Young Professionals", "value": counts["Young Professional"] ?? 0, "color": Colors.green},
-              {"label": "Kids", "value": counts["Kids"] ?? 0, "color": Colors.purple},
+              {
+                "label": "Men",
+                "value": counts["Men"] ?? 0,
+                "color": Colors.blueGrey
+              },
+              {
+                "label": "Women",
+                "value": counts["Women"] ?? 0,
+                "color": Colors.pink
+              },
+              {
+                "label": "Youth",
+                "value": counts["Youth"] ?? 0,
+                "color": Colors.blue
+              },
+              {
+                "label": "Young Pro",
+                "value": counts["Young Pro"] ?? 0,
+                "color": Colors.green
+              },
+              {
+                "label": "Kids",
+                "value": counts["Kids"] ?? 0,
+                "color": Colors.purple
+              },
             ];
 
             return Column(
@@ -37,8 +56,7 @@ class ServiceReportPage extends StatelessWidget {
 
                 // SCALE
                 Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: List.generate(
                     8,
                     (i) => Text("${i * 10}"),
@@ -53,8 +71,7 @@ class ServiceReportPage extends StatelessWidget {
                       final value = item["value"] as int;
 
                       return Padding(
-                        padding:
-                            const EdgeInsets.symmetric(vertical: 10),
+                        padding: const EdgeInsets.symmetric(vertical: 10),
                         child: Row(
                           children: [
                             SizedBox(
@@ -72,8 +89,7 @@ class ServiceReportPage extends StatelessWidget {
                                     widthFactor: value / 70,
                                     child: Container(
                                       height: 26,
-                                      color:
-                                          item["color"] as Color,
+                                      color: item["color"] as Color,
                                     ),
                                   ),
                                 ],

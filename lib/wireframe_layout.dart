@@ -3,7 +3,7 @@ import 'sidebar_icons.dart';
 import 'home_dashboard.dart';
 import 'events_hub.dart';
 import 'event_planner.dart';
-import 'attendance_scanner.dart';
+import 'landing_page.dart';
 import 'settings_page.dart';
 
 class WireframeLayout extends StatefulWidget {
@@ -16,20 +16,26 @@ class WireframeLayout extends StatefulWidget {
 class _WireframeLayoutState extends State<WireframeLayout> {
   int selectedIndex = 0;
 
-  final pages = [
-    const HomeDashboard(),
-    const EventHub(),
-    const EventPlanner(),
-    const AttendanceScanner(),
-    const SettingsPage(),
-  ];
+  List<Widget> get pages => [
+        const HomeDashboard(),
+        const EventHub(),
+        const EventPlanner(),
+        LandingPage(
+          embeddedInDashboard: true,
+          onBackToDashboard: () {
+            setState(() {
+              selectedIndex = 0;
+            });
+          },
+        ),
+        const SettingsPage(),
+      ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
         children: [
-
           //  Sidebar
           SidebarIcons(
             selectedIndex: selectedIndex,
@@ -44,7 +50,6 @@ class _WireframeLayoutState extends State<WireframeLayout> {
           Expanded(
             child: pages[selectedIndex],
           ),
-
         ],
       ),
     );

@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'dart:ui_web' as ui;
 import 'dart:html' as html;
-import 'landing_page.dart'; 
+import 'login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Supabase.initialize(
     url: 'https://pzawnkdtawyqclpzqzue.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB6YXdua2R0YXd5cWNscHpxenVlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxNjI0NDcsImV4cCI6MjA4OTczODQ0N30.RA-uSclUnQNjewoN6ixWybqYbk8YdvK3qEMTetx9HuE',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB6YXdua2R0YXd5cWNscHpxenVlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxNjI0NDcsImV4cCI6MjA4OTczODQ0N30.RA-uSclUnQNjewoN6ixWybqYbk8YdvK3qEMTetx9HuE',
   );
 
   ui.platformViewRegistry.registerViewFactory(
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const LandingPage(),
+      home: const LoginPage(),
     );
   }
 }
